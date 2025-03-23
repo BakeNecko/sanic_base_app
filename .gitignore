@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+.pytest_cache
+
+# Virtual Environments
+env/
+venv/
+ENV/
+.venv/
+env.bak/
+venv.bak/
+.tox*
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Pytest
+.cache
+*.cover
+*.log
+*.pot
+*.pyc
+*.pyd
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Coverage reports
+htmlcov/
+.coverage

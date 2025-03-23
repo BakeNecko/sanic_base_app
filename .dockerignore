@@ -1,0 +1,41 @@
+# Игнорируем все временные и кэшированные файлы
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.egg-info/
+*.egg
+.pytest_cache
+
+# Игнорируем виртуальные окружения
+env/
+venv/
+ENV/
+.venv/
+env.bak/
+venv.bak/
+
+# Игнорируем папки и файлы, связанные с IDE и редакторами
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# Игнорируем системные файлы
+.DS_Store
+Thumbs.db
+
+# Игнорируем файлы конфигурации и секреты
+*.env
+*.local
+
+# Игнорируем тестовые и временные файлы
+*.log
+*.pot
+*.cover
+*.cache
+htmlcov/
