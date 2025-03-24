@@ -11,7 +11,6 @@ class User(BaseModel):
     email = Column(String(length=128), unique=True, nullable=False)
     password = Column(String(length=512), nullable=False)
     is_admin = Column(Boolean, default=False)
-    is_active = Column(Boolean, default=True)
     bills = relationship("Bill", back_populates="user")
     
     def to_dict(self, fk_include: bool = False):

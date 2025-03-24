@@ -93,7 +93,6 @@ async def user_admin(async_db_session, default_password):
         email='admin@mail.ru',
         password=default_password,
         is_admin=True, 
-        is_active=True,
         )
     await async_db_session.commit()
     return user
@@ -106,7 +105,6 @@ async def user_normal(async_db_session, default_password):
         email='user@mail.ru',
         password=default_password,
         is_admin=False, 
-        is_active=True,
         )
     await async_db_session.commit()
     return user
@@ -118,7 +116,6 @@ async def many_users(async_db_session) -> list[int]:
             session=async_db_session,
             password='1234',
             is_admin=False, 
-            is_active=True,
     )
     await async_db_session.commit()
     return [u.id for u in users]

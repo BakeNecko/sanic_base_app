@@ -46,4 +46,4 @@ services:
       POSTGRES_USER: ${PYTEST_POSTGRES_USER}
       POSTGRES_PASSWORD: ${PYTEST_POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5433:5433"

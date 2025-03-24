@@ -1,10 +1,14 @@
 PROJECT_NAME = my_app
 DOCKER_COMPOSE = docker compose
-TEST_COMMAND = pytest
-ENV_FILE = .env
 
 .PHONY: all
-all: run
+all: start migrate dump
+
+
+.PHONY: start
+start:
+	@echo "Запуск контейнеров..."
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) up -d --build
 
 .PHONY: run
 run:
@@ -50,4 +54,18 @@ clean: down
 
 .PHONY: logs
 logs:
-	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) logs -f 
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) logs -f --tail 50
+
+.PHONY: help
+help:
+	@echo "Доступные команды:"
+	@echo "  run      - Запуск контейнеров в режиме отладки"
+	@echo "  start    - Запуск контейнеров в фоновом режиме"
+	@echo "  down     - Остановить все контейнеры"
+	@echo "  migrate  - Применить миграции Alemibc"
+	@echo "  dump     - Загрузить дамп пользовательских данных"
+	@echo "  shell    - Зайти в sanic-container"
+	@echo "  psql     - Зайти в postgres-container"
+	@echo "  clean    - Сначала down затем rm -f"
+	@echo "  clean_db - Очистить БД"
+	@echo "  logs     - Последние логи контейнеров"
