@@ -14,6 +14,8 @@ Docker version 27.1.1, build 6312585
 4. `alembic -c app/alembic.ini  upgrade head`
 5. Исп. скрипт dump/user_dump.sql (см make dump)
 6. `sanic app.server:create_app`
+
+
 ---
 ### Данные пользователей. 
 После make dump/исп. user_dump. 
@@ -110,5 +112,3 @@ GET - Получить инфорамция по конкретному счет
 Админ может получить по любому, пользователь только по своему
 
 `127.0.0.1:8000/api/wh/bills/<int>`
-
-Docker version 27.1.1, build 6312585

@@ -2,8 +2,12 @@ PROJECT_NAME = my_app
 DOCKER_COMPOSE = docker compose
 
 .PHONY: all
-all: start migrate dump
+all: start sleep migrate dump
 
+# Иногда миграции alembic могут запуститься до реального старта postgresql
+.PHONY: sleep
+sleep:
+	sleep 2
 
 .PHONY: start
 start:
