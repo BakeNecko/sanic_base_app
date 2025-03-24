@@ -57,7 +57,7 @@ async def wh_external_pay(request, body: ExternalPayWH):
                 Bill.user_id == user.id,
             ))).scalars().first()
             if not bill:
-                # check amount >= 0 ? 
+                # check amount >= 0 ?
                 bill = Bill(
                     user_id=user.id,
                     amount=body.amount,
@@ -66,14 +66,14 @@ async def wh_external_pay(request, body: ExternalPayWH):
                 session.add(bill)
             else:
                 bill.amount += body.amount
-                
+
             session.add(Transactions(
                 transaction_id=body.transaction_id,
                 t_amount=body.amount,
                 bill=bill,
             ))
             await session.commit()
-            
+
         return json({"message": "Webhook received successfully"}, status=200)
     except IntegrityError as e:
         raise BadRequest('transaction_id already registered!')
@@ -90,26 +90,27 @@ async def bills_info(request):
         .options(selectinload(Bill.transactions))
         .limit(limit)
         .offset(offset)
-        )
-    
+    )
+
     if not request.ctx.is_admin:
         smtp = smtp.where(Bill.user_id == request.ctx.user_id)
     bills = (await request.ctx.session.execute(smtp)).scalars().all()
     return json([BillSerializer.model_validate(bill).model_dump() for bill in bills])
 
+
 @wh_pay_bp.get("/bills/<bill_id:int>", name='bill_detail')
 @login_required
-async def bill_detail(request, bill_id = None):
+async def bill_detail(request, bill_id=None):
     q_filter = (Bill.id == bill_id)
     if not request.ctx.is_admin:
         q_filter = (and_(Bill.id == bill_id, Bill.user_id == request.ctx.user_id))
-    
+
     smtp = (
         select(Bill)
         .options(selectinload(Bill.transactions))
         .where(q_filter)
         .order_by(desc(Bill.created_at))
-        )
+    )
     bill = (await request.ctx.session.execute(smtp)).scalars().first()
     if not bill:
         raise NotFound('Bill not found or you do not have access')

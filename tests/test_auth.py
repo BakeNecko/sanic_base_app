@@ -9,13 +9,14 @@ async def anon_request(app):
     url = app.url_for(USER_API_URL)
     _, response = await app.asgi_client.get(url)
     assert response.status == 401
-    
+
+
 @pytest.mark.asyncio
 async def test_login(
-        user_normal,
-        default_password,
-        app,
-    ):
+    user_normal,
+    default_password,
+    app,
+):
     url = app.url_for(LOGIN_API_URL)
     body = {
         'email': user_normal.email,
@@ -37,13 +38,14 @@ async def test_login(
     _, response = await app.asgi_client.post(url, json=body)
     assert response.status == 200, response.json
     new_access_token = response.json['access_token']
-    
+
     # Check new access token
     headers = {'Authorization': f'Bearer {new_access_token}'}
     url = app.url_for(ME_API_URL)
     _, response = await app.asgi_client.get(url, headers=headers)
     assert response.status == 200, response.json
-    
+
+
 @pytest.mark.asyncio
 async def test_expired_jwt(
     app,
@@ -54,4 +56,3 @@ async def test_expired_jwt(
     url = app.url_for(ME_API_URL)
     _, response = await app.asgi_client.get(url, headers=headers)
     assert response.status == 401, response.json
-

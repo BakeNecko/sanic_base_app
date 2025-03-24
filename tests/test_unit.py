@@ -11,5 +11,3 @@ def test_sign_func():
     sign_str = f'{account_id}{amount}{transaction_id}{user_id}{secret_key}'
 
     assert get_signature(sign_str) == signature
-
-    

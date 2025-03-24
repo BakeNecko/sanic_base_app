@@ -12,6 +12,7 @@ api_auth_bp = Blueprint("api_auth_bp", url_prefix="/auth/")
 
 app = Sanic.get_app()
 
+
 @api_auth_bp.post("/login", name='login')
 @validate(LoginRequest)
 async def login_view(request, body: LoginRequest):
@@ -22,8 +23,8 @@ async def login_view(request, body: LoginRequest):
     ---
     Храним refresh токен в Redis с временем хранения равным exp.
     Чтобы сделать logout пользователя удаляем токен из Redis ->
-    соотв. @login_required не подтвердит наличие токена и 
-    пользователь будет деавторизован.
+    соотв. по истечению access_token пользователь будет деавторизован.
+    ofc если добавить проверку на наличие Redis-токена. в refresh 
     """
     async with request.ctx.session as session:
         result = await session.execute(select(User).where(User.email == body.email))
@@ -49,17 +50,18 @@ async def login_view(request, body: LoginRequest):
                 'refresh_token': refresh_token
             })
         raise BadRequest('Invalid password')
-        
+
+
 @api_auth_bp.post('/refresh', name='refresh')
 async def refresh(request):
     refresh_token = request.json.get('refresh_token')
-    
+
     try:
         payload = jwt.decode(
-            refresh_token, 
-            app.config.SECRET_KEY, 
+            refresh_token,
+            app.config.SECRET_KEY,
             algorithms=app.config.ALGO,
-            )
+        )
         user_id = payload['id']
     except jwt.ExpiredSignatureError:
         return json({'error': 'Refresh token expired'}, status=401)
@@ -70,15 +72,14 @@ async def refresh(request):
         user = await session.get(User, user_id)
         if not user:
             return json({'error': 'User  not found'}, status=404)
-        
-        # Генерация нового access token
+
         new_access_token = jwt.encode(
             {'id': user.id,
              'is_admin': user.is_admin,
              'exp': timezone_now() + app.config.ACCESS_TOKEN_EXPIRE_DELTA,
-             }, 
-            app.config.SECRET_KEY, 
-            algorithm=app.config.ALGO, 
-            )
-        
+             },
+            app.config.SECRET_KEY,
+            algorithm=app.config.ALGO,
+        )
+
         return json({'access_token': new_access_token})

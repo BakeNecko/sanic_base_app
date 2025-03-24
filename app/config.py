@@ -17,9 +17,9 @@ class DevConfig(Config):
     ACCESS_TOKEN_EXPIRE_DELTA = os.getenv('ACCESS_TOKEN_EXPIRE_DELTA', 60 * 15)
     LOG_LEVEL = os.getenv('LOG_LEVEL', default='DEBUG')
 
+
 class PytestConfig(DevConfig):
     POSTGRES_HOST = os.getenv('PYTEST_POSTGRES_HOST', 'postgresql_pytest')
     POSTGRES_DB = os.getenv('PYTEST_POSTGRES_DB', 'pytestdb')
     POSTGRES_USER = os.getenv('PYTEST_POSTGRES_USER', 'pytestuser')
     POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD', 'mypassword')
-    
